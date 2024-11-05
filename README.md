@@ -1,7 +1,7 @@
 
   
 
-# ThndrTask: Stock Viewer and Search App**
+# ThndrTask: Stock Viewer and Search App
 
   
 
