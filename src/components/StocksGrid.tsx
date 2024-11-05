@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
-import BootSplash from 'react-native-bootsplash';
+// import BootSplash from 'react-native-bootsplash';
 
 import StockCard from './StockCard';
 import {getStocks, loadMoreStocks, searchStocks} from '../utils/apiService';
 import SearchBar from './SearchBar';
 import debounce from '../utils/debounce';
-interface IStock {
-  name: string;
-  ticker: string;
-}
+import {IStock} from '../utils/interface';
 
 function StocksGrid(): React.JSX.Element {
-  const [stocks, setStocks] = useState<IStock[]>([]);
+  const [stocks, setStocks] = useState<IStock[]>([
+    {ticker: '', name: ''},
+    {ticker: '', name: ''},
+  ]);
   const [nextUrl, setNextUrl] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [isLoadMoreStocks, setIsLoadMoreStocks] = useState<boolean>(true);
@@ -32,10 +32,10 @@ function StocksGrid(): React.JSX.Element {
 
   useEffect(() => {
     loadInitialStocks();
-    loadInitialStocks().finally(async () => {
-      await BootSplash.hide({fade: true});
-      console.log('BootSplash has been hidden successfully');
-    });
+    // loadInitialStocks().finally(async () => {
+    //   // await BootSplash.hide({fade: true});
+    //   console.log('BootSplash has been hidden successfully');
+    // });
   }, []);
 
   const loadMore = async () => {
@@ -69,24 +69,25 @@ function StocksGrid(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      {stocks.length > 0 && (
-        <>
-          <SearchBar onChange={searchInStocks} />
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={stocks}
-            directionalLockEnabled
-            numColumns={2}
-            ListFooterComponent={<View style={styles.gridFooter} />}
-            keyExtractor={item => item.ticker}
-            contentContainerStyle={styles.gridContainer}
-            onEndReached={isLoadMoreStocks ? debounce(loadMore, 500) : null}
-            renderItem={({item}) => (
-              <StockCard ticker={item.ticker} name={item.name} />
-            )}
-          />
-        </>
-      )}
+      (
+      <>
+        <SearchBar onChange={searchInStocks} />
+        <FlatList
+          testID="FlatList"
+          showsVerticalScrollIndicator={false}
+          data={stocks}
+          directionalLockEnabled
+          numColumns={2}
+          ListFooterComponent={<View style={styles.gridFooter} />}
+          keyExtractor={item => item.ticker}
+          contentContainerStyle={styles.gridContainer}
+          onEndReached={isLoadMoreStocks ? debounce(loadMore, 500) : null}
+          renderItem={({item}) => (
+            <StockCard ticker={item.ticker} name={item.name} />
+          )}
+        />
+      </>
+      )
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#ffffff" />
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     width: '85%',
+    height: '100%',
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
