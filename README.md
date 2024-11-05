@@ -199,7 +199,7 @@ To get the latest price and data for a stock (e.g., `AAPL` for Apple), the app m
 
 https://api.polygon.io/v2/aggs/ticker/AAPL/prev?apiKey=your_polygon_api_key**
 
-**```
+```
 
   
 
